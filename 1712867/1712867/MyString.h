@@ -30,6 +30,7 @@ public:
 
 	//
 	MyString operator+(const MyString &string);
+	MyString operator+(const char* string);
 	friend MyString operator+(const char* string_1,const MyString &string_2);
 	MyString operator+(const char &ch);
 	friend MyString operator+(const char &ch, const MyString &string);
@@ -80,6 +81,8 @@ public:
 	//COPY
 	int Copy(char* string, int len, int pos)const;
 
+	// EMPTY
+	bool Empty() const;
 	// SWAP
 	friend void Swap(MyString &string_1,MyString &string_2);
 

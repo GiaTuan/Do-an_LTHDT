@@ -118,26 +118,17 @@ MyString MyString::operator+(const MyString &string)
 	new_string.str[new_size] = '\0';
 	return new_string;
 }
+MyString MyString::operator+(const char* string)
+{
+	MyString str(string);
+	return *this + str;
+}
+
 
 MyString operator+(const char* string_1, const MyString &string_2)
 {
-	MyString new_string;
-	int size_1 = strlen(string_1);
-	int size_2 = string_2.Size();
-	int new_size = size_1 + size_2;
-	new_string = new char[new_size + 1];
-	int i = 0;
-	for (i; i < size_1; i++)
-	{
-		new_string.str[i] = string_1[i];
-	}
-	int j = 0;
-	for (j = 0, i; i < new_size; i++, j++)
-	{
-		new_string.str[i] = string_2[j];
-	}
-	new_string.str[new_size] = '\0';
-	return new_string;
+	MyString str_1(string_1);
+	return str_1 + string_2;
 }
 
 MyString MyString::operator+(const char &ch)
@@ -211,11 +202,8 @@ bool MyString::operator!=(const MyString &string)const
 }
 bool operator!=(const char* string_1, const MyString &string_2) 
 {
-	if (!(string_1 ==string_2))
-	{
-		return true;
-	}
-	return false;
+	MyString str(string_1);
+	return str != string_2;
 }
 
 bool MyString::operator>(const MyString &string)const
@@ -229,11 +217,8 @@ bool MyString::operator>(const MyString &string)const
 
 bool operator>(const char* string_1, const MyString &string_2)
 {
-	if (strcmp(string_1, string_2.str) > 0)
-	{
-		return true;
-	}
-	return false;
+	MyString str(string_1);
+	return str > string_2;
 }
 
 bool MyString::operator<(const MyString &string)const
@@ -246,11 +231,8 @@ bool MyString::operator<(const MyString &string)const
 }
 bool operator<(const char* string_1, const MyString &string_2)
 {
-	if (strcmp(string_1, string_2.str) < 0)
-	{
-		return true;
-	}
-	return false;
+	MyString str(string_1);
+	return str < string_2;
 }
 bool MyString::operator>=(const MyString &string)const
 {
@@ -262,11 +244,8 @@ bool MyString::operator>=(const MyString &string)const
 }
 bool operator>=(const char* string_1, const MyString &string_2)
 {
-	if ((string_1 > string_2) || (string_1 == string_2))
-	{
-		return true;
-	}
-	return false;
+	MyString str(string_1);
+	return str >= string_2;
 }
 bool MyString::operator<=(const MyString &string)const
 {
@@ -278,11 +257,8 @@ bool MyString::operator<=(const MyString &string)const
 }
 bool operator<=(const char* string_1, const MyString &string_2)
 {
-	if ((string_1 < string_2) || (string_1 == string_2))
-	{
-		return true;
-	}
-	return false;
+	MyString str(string_1);
+	return str <= string_2;
 }
 
 //========================APPEND========================
@@ -484,6 +460,17 @@ int MyString::Copy(char* string, int len, int pos)const
 			return count;
 		}
 	}
+}
+
+//========================EMPTY========================
+
+bool MyString::Empty() const
+{
+	if (this->Size() == 0)
+	{
+		return true;
+	}
+	return false;
 }
 
 

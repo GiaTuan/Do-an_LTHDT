@@ -1,14 +1,21 @@
 #include <iostream>
+#include <string>
 #include "MyString.h"
 using namespace std;
 
 int main()
 {
-	char buffer[20];
-	MyString str("Test string...");
-	int length = str.Copy(buffer, 6, 5);
-	buffer[length] = '\0';
-	std::cout << "buffer contains: " << buffer << '\n';
+	MyString content;
+MyString line;
+cout << "Please introduce a text. Enter an empty line to finish:\n";
+do {
+	GetLine(std::cin, line);
+	content = content + line;
+	content=content +'\n';
+} while (!line.Empty());
+std::cout << "The text you introduced was:\n" << content;
+
+	
 	system("pause");
 	return 0;
 }
