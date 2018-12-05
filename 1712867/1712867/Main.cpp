@@ -6,18 +6,16 @@ using namespace std;
 
 int main()
 {
-	ifstream in;
-	MyString a;
-	in.open("test.txt", ios::in);
-	if (in)
-	{
-		while (!in.eof())
-		{
-			a.Push_back(in.get());
-		}
-		in.close();
-	}
-	cout << a;
+	MyString foo = "alpha";
+	MyString bar = "beta";
+
+	if (foo == bar) std::cout << "foo and bar are equal\n";
+	if (foo != bar) std::cout << "foo and bar are not equal\n";
+	if (foo < bar) std::cout << "foo is less than bar\n";
+	if (foo > bar) std::cout << "foo is greater than bar\n";
+	if (foo <= bar) std::cout << "foo is less than or equal to bar\n";
+	if (foo >= bar) std::cout << "foo is greater than or equal to bar\n";
+
 	system("pause");
 	return 0;
 }

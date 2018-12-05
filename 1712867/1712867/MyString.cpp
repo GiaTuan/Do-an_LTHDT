@@ -164,6 +164,14 @@ bool operator==(const char* string_1, const MyString &string_2)
 	}
 	return false;
 }
+bool MyString::operator==(const char* &string)const
+{
+	if (strcmp(this->str, string) == 0)
+	{
+		return true;
+	}
+	return false;
+}
 
 bool MyString::operator!=(const MyString &string)const
 {
@@ -178,7 +186,12 @@ bool operator!=(const char* string_1, const MyString &string_2)
 	MyString str(string_1);
 	return str != string_2;
 }
+bool MyString::operator!=(const char* &string)const
 
+{
+	MyString str(string);
+	return *this != str;
+}
 bool MyString::operator>(const MyString &string)const
 {
 	if (strcmp(this->str, string.str) > 0)
@@ -193,7 +206,11 @@ bool operator>(const char* string_1, const MyString &string_2)
 	MyString str(string_1);
 	return str > string_2;
 }
-
+bool MyString::operator>(const char* &string)const
+{
+	MyString str(string);
+	return *this > str;
+}
 bool MyString::operator<(const MyString &string)const
 {
 	if (strcmp(this->str, string.str) <0)
@@ -206,6 +223,11 @@ bool operator<(const char* string_1, const MyString &string_2)
 {
 	MyString str(string_1);
 	return str < string_2;
+}
+bool MyString::operator<(const char* &string)const
+{
+	MyString str(string);
+	return *this < str;
 }
 bool MyString::operator>=(const MyString &string)const
 {
@@ -220,6 +242,11 @@ bool operator>=(const char* string_1, const MyString &string_2)
 	MyString str(string_1);
 	return str >= string_2;
 }
+bool MyString::operator>=(const char* &string)const
+{
+	MyString str(string);
+	return *this >= str;
+}
 bool MyString::operator<=(const MyString &string)const
 {
 	if ((*this == string) || (*this < string))
@@ -233,7 +260,11 @@ bool operator<=(const char* string_1, const MyString &string_2)
 	MyString str(string_1);
 	return str <= string_2;
 }
-
+bool MyString::operator<=(const char* &string)const
+{
+	MyString str(string);
+	return *this <= str;
+}
 //========================APPEND========================
 MyString& MyString::Append(const MyString &string)
 {
@@ -756,7 +787,53 @@ void MyString::Push_back(char c)
 {
 	this->Resize(this->Size()+1, c);
 }
+//========================REPLACE========================
 
+MyString& MyString::Replace(size_t pos, size_t len, const MyString& str)
+{
+	size_t n = this->Size();
+	size_t m = str.Size();
+	MyString temp(*this,pos+len,n);
+	this->Resize(n + m-len);
+	size_t newSize = this->Size();
+	size_t j = 0;
+	size_t i = pos;
+	size_t k = 0;
+	for (i ; i < newSize ; i++)
+	{
+		if (j<m)
+		{
+			this->str[i] = str[j];
+			j++;
+		}
+		else
+		{
+			this->str[i] = temp[k];
+			k++;
+		}
+	}
+	return *this;
+}
+MyString& MyString::Replace(size_t pos, size_t len, const MyString& string, size_t subpos, size_t sublen)
+{
+	MyString str(string, subpos, sublen);
+	return this->Replace(pos, len, str);
+}
+MyString& MyString::Replace(size_t pos, size_t len, const char* s)
+{
+	MyString str(s);
+	return this->Replace(pos, len, str);
+}
+MyString& MyString::Replace(size_t pos, size_t len, const char* s, size_t n)
+{
+	MyString str(s, n);
+	return this->Replace(pos, len, str);
+}
+MyString& MyString::Replace(size_t pos, size_t len, size_t n, char c)
+{
+	MyString str(n, c);
+	return this->Replace(pos, len, str);
+}
 //========================RESIZE========================
 
 void MyString::Resize(size_t n)
@@ -826,6 +903,13 @@ istream& GetLine(istream &inDev, MyString &string)
 	inDev.getline(string.str, 255);
 	return inDev;
 }
+istream& Getline(istream& inDev, MyString& string, char delim)
+{
+	string.str = new char[255 + 1];
+	inDev.getline(string.str, 255, delim);
+	return inDev;
+}
+
 //
 istream& operator>>(istream& inDev, MyString &string)
 {

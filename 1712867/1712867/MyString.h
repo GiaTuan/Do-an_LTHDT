@@ -14,7 +14,7 @@ private:
 public:
 	static const size_t npos = -1;
 
-	//CONSTRUCTOR
+	// CONSTRUCTOR
 	MyString();
 	MyString(const MyString &string);
 	MyString(const MyString &string,size_t pos,size_t n_size);
@@ -22,15 +22,17 @@ public:
 	MyString(const char* string,size_t n_size);
 	MyString(size_t n_size, char c);
 	
-	//DESTRUCTOR
+	// DESTRUCTOR
 	~MyString();
 
-	//OVERLOAD FUNCTIONS
+	// OPERATOR[]
 	char& operator[] (size_t pos);
 	const char& operator[](size_t pos)const;
+
+	// OPERATOR=
 	MyString& operator=(const MyString &string);
 
-	//
+	// OPERATOR+
 	friend MyString operator+(const MyString &string_1, const MyString &string_2);
 	friend MyString operator+(const MyString &string_1,const char* string_2);
 	friend MyString operator+(const char* string_1,const MyString &string_2);
@@ -40,17 +42,27 @@ public:
 	// RELATIONAL OPERATORS
 	bool operator==(const MyString &string)const;
 	friend bool operator==(const char* string_1, const MyString &string_2);
+	bool operator==(const char* &string)const;
+	
 	bool operator!=(const MyString &string)const;
 	friend bool operator!=(const char* string_1, const MyString &string_2);
+	bool operator!=(const char* &string)const;
+
 	bool operator>(const MyString &string)const;
 	friend bool operator>(const char* string_1, const MyString &string_2);
+	bool operator>(const char* &string)const;
+
 	bool operator<(const MyString &string)const;
 	friend bool operator<(const char* string_1, const MyString &string_2);
+	bool operator<(const char* &string)const;
+
 	bool operator>=(const MyString &string)const;
 	friend bool operator>=(const char* string_1, const MyString &string_2);
+	bool operator>=(const char* &string)const;
+
 	bool operator<=(const MyString &string)const;
 	friend bool operator<=(const char* string_1, const MyString &string_2);
-
+	bool operator<=(const char* &string)const;
 	// APPEND
 	MyString& Append(const MyString &string);
 	MyString& Append(const MyString &string, size_t pos, size_t len);
@@ -68,13 +80,15 @@ public:
 	// AT
 	char& At(int pos);
 	const char& At(int pos)const;
+	
 	// BACK
 	char& Back();
 	const char& Back() const;
+	
 	// CAPACITY
 	int Capacity() const;
 
-	//COMPARE
+	// COMPARE
 	int Compare(const MyString& str) const;
 	int Compare(size_t pos, size_t len, const MyString &string)const;
 	int Compare(size_t pos, size_t len, const MyString &string, size_t subpos, size_t sublen)const;
@@ -82,7 +96,7 @@ public:
 	int Compare(size_t pos, size_t len, const char* s) const;
 	int Compare(size_t pos, size_t len, const char* s, size_t n) const;
 
-	//COPY
+	// COPY
 	size_t Copy(char* string, size_t len, size_t pos)const;
 
 	// C_STR
@@ -124,7 +138,7 @@ public:
 	size_t Find_last_of(const char* s, size_t pos, size_t n) const;
 	size_t Find_last_of(char c, size_t pos = 0) const;
 
-	//	 INSERT
+	// INSERT
 	MyString& Insert(size_t pos, const MyString& str);
 	MyString& Insert(size_t pos, const MyString& str, size_t subpos, size_t sublen);
 	MyString& Insert(size_t pos, const char* s);
@@ -134,8 +148,6 @@ public:
 	// FRONT
 	char& Front();
 	const char& Front() const;
-
-
 
 	// LENGTH
 	size_t Length() const;
@@ -154,6 +166,12 @@ public:
 	// EMPTY
 	bool Empty() const;
 	
+	MyString& Replace(size_t pos, size_t len, const MyString& str);
+	MyString& Replace(size_t pos, size_t len, const MyString& str,size_t subpos, size_t sublen);
+	MyString& Replace(size_t pos, size_t len, const char* s);
+	MyString& Replace(size_t pos, size_t len, const char* s, size_t n);
+	MyString& Replace(size_t pos, size_t len, size_t n, char c);
+
 	// RESIZE
 	void Resize(size_t n);
 	void Resize(size_t n, char c);
@@ -164,15 +182,16 @@ public:
 	// SWAP
 	friend void Swap(MyString &string_1,MyString &string_2);
 
-
-
-	//
+	// GETLINE
 	friend istream& GetLine(istream &inDev, MyString &string);
+	friend istream& Getline(istream& inDev, MyString& string, char delim);
 	friend istream& operator>>(istream& inDev,  MyString &string);
 	friend ostream& operator<<(ostream& outDev, const MyString &string);
 
-	//OTHERS
+	// SIZE
 	size_t Size()const;
+
+	// CLEAR
 	void Clear();
 };
 #endif
