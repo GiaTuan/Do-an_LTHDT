@@ -1,42 +1,45 @@
 #include "MyString.h"
 
-
-
-const char& MyString::operator[](int n)const
+char& MyString::operator[] (size_t pos)
 {
-	return this->str[n];
+	return this->str[pos];
 }
-int MyString::Size()const
+
+const char& MyString::operator[](size_t pos)const
+{
+	return this->str[pos];
+}
+size_t MyString::Size()const
 {
 	return strlen(this->str);
 }
 MyString::MyString()
 {
-	int size = 1;
+	size_t size = 0;
 	this->str = new char[size+1];
 	this->str[0] = '\0';
 }
 MyString::MyString(const MyString &string)
 {
-	int size = string.Size();
+	size_t size = string.Size();
 	this->str = new char[size + 1];
-	for (int i = 0; i < size; i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		this->str[i] = string[i];
 	}
 	this->str[size] = '\0';
 }
-MyString::MyString(const MyString &string, int pos, int n_size)
+MyString::MyString(const MyString &string, size_t pos, size_t n_size)
 {
-	int size = n_size;
-	int count = 0;
+	size_t size = n_size;
+	size_t count = 0;
 	this->str = new char[size + 1];
-	int n = string.Size();
-	for (int i = 0; i < n; i++)
+	size_t n = string.Size();
+	for (size_t i = 0; i < n; i++)
 	{
 		if (i == pos )
 		{
-			for (int j=i; count < n_size; j++)
+			for (size_t j=i; count < n_size; j++)
 			{
 				this->str[count] = string[j];
 				count++;
@@ -48,7 +51,7 @@ MyString::MyString(const MyString &string, int pos, int n_size)
 }
 MyString::MyString(const char* string)
 {
-	int size = strlen(string);
+	size_t size = strlen(string);
 	this->str = new char [size + 1];
 	for (int i = 0; i < size; i++)
 	{
@@ -56,21 +59,21 @@ MyString::MyString(const char* string)
 	}
 	this->str[size] = '\0';
 }
-MyString::MyString(const char* string, int n_size)
+MyString::MyString(const char* string, size_t n_size)
 {
-	int size = n_size ;
+	size_t size = n_size ;
 	this->str = new char[size + 1];
-	for (int i = 0; i < size; i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		this->str[i] = string[i];
 	}
 	this->str[size] = '\0';
 }
-MyString::MyString(int n_size, char c)
+MyString::MyString(size_t n_size, char c)
 {
-	int size = n_size ;
+	size_t size = n_size ;
 	this->str = new char[size + 1];
-	for (int i = 0; i < size; i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		this->str[i] = c;
 	}
@@ -79,9 +82,9 @@ MyString::MyString(int n_size, char c)
 MyString& MyString::operator=(const MyString &string)
 {
 	delete[] this->str;
-	int size = string.Size();
+	size_t size = string.Size();
 	this->str = new char[size+1];
-	for (int i = 0; i < size; i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		this->str[i] = string[i];
 	}
@@ -98,30 +101,30 @@ void MyString::Clear()
 	delete[] this->str;
 }
 
-MyString MyString::operator+(const MyString &string)
+MyString operator+(const MyString &string_1, const MyString &string_2)
 {
 	MyString new_string;
-	int size_1 = this->Size();
-	int size_2 = string.Size();
-	int new_size = size_1 + size_2;
-	new_string = new char[new_size + 1];
-	int i = 0;
+	size_t size_1 = string_1.Size();
+	size_t size_2 = string_2.Size();
+	size_t new_size = size_1 + size_2;
+	new_string.str = new char[new_size + 1];
+	size_t i = 0;
 	for (i; i < size_1; i++)
 	{
-		new_string.str[i] = this->str[i];
+		new_string.str[i] = string_1[i];
 	}
-	int j = 0;
+	size_t j = 0;
 	for (j=0,i; i < new_size; i++,j++)
 	{
-		new_string.str[i] = string[j];
+		new_string.str[i] = string_2[j];
 	}
 	new_string.str[new_size] = '\0';
 	return new_string;
 }
-MyString MyString::operator+(const char* string)
+MyString operator+(const MyString &string_1,const char* string)
 {
 	MyString str(string);
-	return *this + str;
+	return string_1 + str;
 }
 
 
@@ -131,45 +134,15 @@ MyString operator+(const char* string_1, const MyString &string_2)
 	return str_1 + string_2;
 }
 
-MyString MyString::operator+(const char &ch)
+MyString operator+(const MyString &string,const char &ch)
 {
-	MyString new_string;
-	int size_1 = this->Size();
-	int size_2 = 1;
-	int new_size = size_1 + size_2;
-	new_string = new char[new_size + 1];
-	int i = 0;
-	for (i; i < size_1; i++)
-	{
-		new_string.str[i] = this->str[i];
-	}
-	int j = 0;
-	for (j = 0, i; i < new_size; i++, j++)
-	{
-		new_string.str[i] = ch;
-	}
-	new_string.str[new_size] = '\0';
-	return new_string;
+	MyString str(1,ch);
+	return string + str;
 }
 MyString operator+(const char &ch, const MyString &string)
 {
-	MyString new_string;
-	int size_1 = 1;
-	int size_2 = string.Size();
-	int new_size = size_1 + size_2;
-	new_string = new char[new_size + 1];
-	int i = 0;
-	for (i; i < size_1; i++)
-	{
-		new_string.str[i] = ch;
-	}
-	int j = 0;
-	for (j = 0, i; i < new_size; i++, j++)
-	{
-		new_string.str[i] = string[j];
-	}
-	new_string.str[new_size] = '\0';
-	return new_string;
+	MyString str(1, ch);
+	return str + string;
 }
 
 //========================RELATIONAL OPERATORS========================
@@ -265,67 +238,36 @@ bool operator<=(const char* string_1, const MyString &string_2)
 MyString& MyString::Append(const MyString &string)
 {
 	MyString temp_string;
-	int size_1 = this->Size();
-	int size_2 = string.Size();
-	int temp_size=size_1+size_2;
+	size_t size_1 = this->Size();
+	size_t size_2 = string.Size();
+	size_t temp_size=size_1+size_2;
 	temp_string.str = new char[temp_size+1];
 	temp_string = *this + string;
 	*this = temp_string;
 	return *this;
 }
-MyString& MyString::Append(const MyString &string, int pos, int len)
+MyString& MyString::Append(const MyString &string, size_t pos, size_t len)
 {
-	MyString temp_string;
-	int size_1 = this->Size();
-	int temp_size = size_1 + len;
-	int count = 0;
-	temp_string.str = new char[temp_size + 1];
-	int n = string.Size();
-	for (int i = 0; i < n; i++)
-	{
-		if (i == pos )
-		{
-			for (int j = i; count < len; j++)
-			{
-				temp_string.str[count] = string[j];
-				count++;
-			}
-			temp_string.str[count] = '\0';
-			temp_string = *this + temp_string;
-			*this = temp_string;
-			return *this;
-		}
-	}
+	MyString str(string, pos, len);
+	return this->Append(str);
 }
-MyString& MyString::Append(const char* string, int n_size)
+MyString& MyString::Append(const char* string)
 {
-	MyString temp_string;
-	int size_1 = this->Size();
-	int temp_size = size_1 + n_size;
-	temp_string.str = new char[temp_size + 1];
-	for (int i = 0; i < n_size; i++)
-	{
-		temp_string.str[i] = string[i];
-	}
-	temp_string.str[n_size] = '\0';
-	temp_string = *this + temp_string;
-	*this = temp_string;
-	return *this;
+	MyString str(string);
+	return this->Append(str);
 }
-MyString& MyString::Append(int n_size, const char &ch)
+
+
+MyString& MyString::Append(const char* string, size_t n_size)
 {
-	MyString temp_string;
-	int size_1 = this->Size();
-	int temp_size = size_1 + n_size;
-	temp_string.str = new char[temp_size + 1];
-	for (int i = 0; i < n_size; i++)
-	{
-		temp_string.str[i] =ch;
-	}
-	temp_string.str[n_size] = '\0';
-	temp_string = *this + temp_string;
-	*this = temp_string;
-	return *this;
+	MyString str(string, 0, n_size);
+	return this->Append(str);
+}
+MyString& MyString::Append(size_t n_size, const char &ch)
+{
+	MyString str(n_size, ch);
+	return this->Append(str);
+
 }
 //========================ASSIGN========================
 MyString& MyString::Assign(const MyString &string)
@@ -336,48 +278,25 @@ MyString& MyString::Assign(const MyString &string)
 
 MyString& MyString::Assign(const MyString &string, int pos, int len)
 {
-	MyString temp_string;
-	int count = 0;
-	temp_string.str = new char[len + 1];
-	int n = string.Size();
-	for (int i = 0; i < n; i++)
-	{
-		if (i == pos)
-		{
-			for (int j = i; count < len; j++)
-			{
-				temp_string.str[count] = string[j];
-				count++;
-			}
-			temp_string.str[count] = '\0';
-			*this = temp_string;
-			return *this;
-		}
-	}
+	MyString str(string, pos, len);
+	return this->Assign(str);
 }
+MyString& MyString::Assign(const char* string)
+{
+	MyString str(string);
+	return this->Assign(str);
+}
+
+
 MyString& MyString::Assign(const char* string, int n_size)
 {
-	MyString temp_string;
-	temp_string.str = new char[n_size + 1];
-	for (int i = 0; i < n_size; i++)
-	{
-		temp_string.str[i] = string[i];
-	}
-	temp_string.str[n_size] = '\0';
-	*this = temp_string;
-	return *this;
+	MyString str(string, 0, n_size);
+	return this->Assign(str);
 }
 MyString& MyString::Assign(int n_size, const char &ch)
 {
-	MyString temp_string;
-	temp_string.str = new char[n_size + 1];
-	for (int i = 0; i < n_size; i++)
-	{
-		temp_string.str[i] = ch;
-	}
-	temp_string.str[n_size] = '\0';
-	*this = temp_string;
-	return *this;
+	MyString str(n_size,ch);
+	return this->Assign(str);
 }
 
 //========================AT========================
@@ -416,12 +335,12 @@ int MyString::Compare(const MyString& string) const
 		return -1;
 	}
 }
-int MyString::Compare(int pos, int len, const MyString &string)const
+int MyString::Compare(size_t pos, size_t len, const MyString &string)const
 {
 	MyString str(*this, pos, len);
 	return str.Compare(str);
 }
-int MyString::Compare(int pos, int len, const MyString &string, int subpos, int sublen)const
+int MyString::Compare(size_t pos, size_t len, const MyString &string, size_t subpos, size_t sublen)const
 {
 	MyString str_1(*this, pos, len);
 	MyString str_2(string, subpos, sublen);
@@ -432,27 +351,27 @@ int MyString::Compare(const char* s) const
 	MyString str(s);
 	return this->Compare(str);
 }
-int MyString::Compare(int pos, int len, const char* s) const
+int MyString::Compare(size_t pos, size_t len, const char* s) const
 {
 	MyString str_1(*this,pos,len);
 	return str_1.Compare(s);
 }
-int MyString::Compare(int pos, int len, const char* s, int n) const
+int MyString::Compare(size_t pos, size_t len, const char* s, size_t n) const
 {
 	MyString str(s, n);
 	return this->Compare(pos, len, str);
 }
 //========================COPY========================
 
-int MyString::Copy(char* string, int len, int pos)const
+size_t MyString::Copy(char* string, size_t len, size_t pos)const
 {
-	int n = this->Size();
-	int count = 0;
-	for (int i = 0; i < n; i++)
+	size_t n = this->Size();
+	size_t count = 0;
+	for (size_t i = 0; i < n; i++)
 	{
 		if (i == pos)
 		{
-			for (int j = i; count < len; j++)
+			for (size_t j = i; count < len; j++)
 			{
 				string[count]=this->str[j];
 				count++;
@@ -462,8 +381,340 @@ int MyString::Copy(char* string, int len, int pos)const
 	}
 }
 
-//========================EMPTY========================
+//========================C_STR========================
 
+const char* MyString::C_str()const
+{
+	size_t size = this->Size();
+	char* cstr = new char[size + 1];
+	for (size_t i = 0; i < size; i++)
+	{
+		cstr[i] = this->str[i];
+	}
+	cstr[size] = '\0';
+	return cstr;
+}
+
+MyString& MyString::Erase(size_t pos, size_t len)
+{
+	try {
+		if (pos > this->Size())
+		{
+			throw (char*)"out_of_range";
+		}
+		else
+		{
+			MyString str_1(*this, 0, pos);
+			MyString str_2;
+			if (len == -1)
+			{
+				str_2 = MyString();
+			}
+			else 
+			{
+				str_2=MyString(*this, pos + len, this->Size()); 
+			}
+			return *this= str_1 + str_2;
+		}
+	}
+	catch (char* s)
+	{
+		if (strcmp(s, "out_of_range") == 0)
+		{
+			cout << "position is greater string length"<<endl;
+		}
+	}
+}
+//========================FIND========================
+
+size_t MyString::Find(const MyString& str, size_t pos) const
+{
+	size_t size = this->Size();
+	size_t subsize = str.Size();
+	size_t x = MyString::npos;
+	size_t j = 0;
+	size_t k = 1;
+	size_t n = subsize;
+	for (size_t i = pos; i < size; i++)
+	{
+		if (this->str[i] == str[j])
+		{
+			x = i;
+			for (j = i + 1;; j++)
+			{
+				if (n == 1)
+				{
+					return x;
+				}
+				else if (this->str[j] != str[k])
+				{
+					i = j;
+					x = -1;
+					j = 0;
+					n = subsize;
+					k = 1;
+					break;
+				}
+				else
+				{
+					k++;
+					n--;
+				}
+			}
+			
+		}
+	}
+}
+
+size_t MyString::Find(const char* s, size_t pos ) const
+{
+	MyString str(s);
+	return this->Find(str, pos);
+}
+size_t MyString::Find(const char* s, size_t pos, size_t n) const
+{
+	MyString str(s, n);
+	return this->Find(str,pos);
+}
+size_t MyString::Find(char c, size_t pos ) const
+{
+	MyString str(1,c);
+	return this->Find(str, pos);
+}
+//========================FIND_FIRST_NOT_OF========================
+size_t MyString::Find_first_not_of(const MyString& string, size_t pos ) const
+{
+	size_t size_1 = this->Size();
+	size_t size_2 = string.Size();
+	bool flag = false;
+	for (size_t i = pos; i < size_1; i++)
+	{
+		for (int j = 0; j < size_2; j++)
+		{
+			if (this->str[i] == string[j])
+			{
+				flag = true;
+				break;
+			}
+		}
+		if (flag == false)
+		{
+			return i;
+		}
+		flag = false;
+	}
+}
+size_t MyString::Find_first_not_of(const char* s, size_t pos) const
+{
+	MyString str(s);
+	return this->Find_first_not_of(str, pos);
+	
+}
+size_t MyString::Find_first_not_of(const char* s, size_t pos, size_t n) const
+{
+	MyString str(s, n);
+	return this->Find_first_not_of(str, pos);
+}
+size_t MyString::Find_first_not_of(char c, size_t pos ) const
+{
+	MyString str(1, c);
+	return this->Find_first_not_of(str, pos);
+
+}
+//========================FIND_FIRST_OF========================
+size_t MyString::Find_first_of(const MyString& string, size_t pos) const
+{
+	size_t size_1 = this->Size();
+	size_t size_2 = string.Size();
+	for (size_t i = pos; i < size_1; i++)
+	{
+		for (size_t j = 0; j < size_2; j++)
+		{
+			if (this->str[i] == string[j])
+			{
+				return i;
+			}
+		}
+	}
+	return -1;
+}
+size_t MyString::Find_first_of(const char* s, size_t pos) const
+{
+	MyString str(s);
+	return this->Find_first_of(str, pos);
+
+}
+size_t MyString::Find_first_of(const char* s, size_t pos, size_t n) const
+{
+	MyString str(s, n);
+	return this->Find_first_of(str, pos);
+}
+size_t MyString::Find_first_of(char c, size_t pos) const
+{
+	MyString str(1, c);
+	return this->Find_first_of(str, pos);
+
+}
+//========================FIND_FIRST_NOT_OF========================
+size_t Find_last(const MyString& string_1, const MyString& string_2, size_t pos, bool cond)
+{
+	size_t size_1 = string_1.Size();
+	size_t size_2 = string_2.Size();
+	bool *check = new bool[size_1];
+	bool flag = false;
+	for (size_t i = 0; i < size_1; i++)
+	{
+		for (size_t j = 0; j < size_2; j++)
+		{
+			if (string_1[i] == string_2[j])
+			{
+				check[i] = true;
+				flag = true;
+				break;
+			}
+		}
+		if (flag == false)
+		{
+			check[i] = false;
+		}
+		flag = false;
+	}
+	size_t x = -1;
+	for (size_t i = size_1 - 1; i >= 0; i--)
+	{
+		if (cond == false)
+		{
+			if (check[i] == false)
+			{
+				x = i;
+				break;
+			}
+		}
+		else
+		{
+			if (check[i] == true)
+			{
+				x = i;
+				break;
+			}
+		}
+	}
+	delete[] check;
+	return x;
+}
+
+size_t MyString::Find_last_not_of(const MyString& str, size_t pos ) const
+{
+	return Find_last(*this, str, pos, false);
+}
+size_t MyString::Find_last_not_of(const char* s, size_t pos ) const
+{
+	MyString str(s);
+	return this->Find_last_not_of(str, pos);
+}
+size_t MyString::Find_last_not_of(const char* s, size_t pos, size_t n) const
+{
+	MyString str(s,n);
+	return this->Find_last_not_of(str, pos);
+}
+size_t MyString::Find_last_not_of(char c, size_t pos) const
+{
+	MyString str(1,c);
+	return this->Find_last_not_of(str, pos);
+}
+//========================FIND_LAST_OF========================
+
+size_t MyString::Find_last_of(const MyString& str, size_t pos ) const
+{
+	return Find_last(*this, str, pos, true);
+}
+size_t MyString::Find_last_of(const char* s, size_t pos) const
+{
+	MyString str(s);
+	return this->Find_last_of(str, pos);
+}
+size_t MyString::Find_last_of(const char* s, size_t pos, size_t n) const
+{
+	MyString str(s,n);
+	return this->Find_last_of(str, pos);
+}
+size_t MyString::Find_last_of(char c, size_t pos) const
+{
+	MyString str(1,c);
+	return this->Find_last_of(str, pos);
+}
+
+MyString& MyString::Insert(size_t pos, const MyString& str)
+{
+	size_t n = this->Size();
+	size_t m = str.Size();
+	MyString temp_1(*this, 0, pos);
+	MyString temp_2(*this,pos,n-pos);
+	this->Clear();
+	size_t newSize = n+m;
+	this->str = new char[newSize + 1];
+	size_t i = 0, k = 0, h=0;
+	for (i; i < newSize; i++)
+	{
+		if (i < pos)
+		{
+			this->str[i] = temp_1[i];
+		}
+		else if (i>=pos && k<m)
+		{
+			this->str[i] = str[k];
+			k++;
+		}
+		else
+		{
+			this->str[i] = temp_2[h];
+			h++;
+		}
+	}
+	this->str[i] = '\0';
+	return *this;
+}
+MyString& MyString::Insert(size_t pos, const MyString& string, size_t subpos, size_t sublen)
+{
+	MyString str(string, subpos, sublen);
+	return this->Insert(pos, str);
+}
+
+MyString& MyString::Insert(size_t pos, const char* s)
+{
+	MyString str(s);
+	return this->Insert(pos, str);
+}
+MyString& MyString::Insert(size_t pos, const char* s, size_t n)
+{
+	MyString str(s,n);
+	return this->Insert(pos, str);
+}
+MyString& MyString::Insert(size_t pos, size_t n, char c)
+{
+	MyString str(n,c);
+	return this->Insert(pos, str);
+}
+
+
+//========================FRONT========================
+
+char& MyString::Front()
+{
+	return this->str[0];
+}
+const char& MyString::Front() const
+{
+	return this->str[0];
+}
+
+//========================DATA========================
+
+const char* MyString::Data() const
+{
+	return this->C_str();
+}
+//========================EMPTY========================
 bool MyString::Empty() const
 {
 	if (this->Size() == 0)
@@ -472,8 +723,95 @@ bool MyString::Empty() const
 	}
 	return false;
 }
+//========================LENGTH========================
 
+size_t MyString::Length() const
+{
+	return this->Size();
+}
 
+//========================OPERATOR += ========================
+
+MyString& MyString::operator+= (const MyString& str)
+{
+	return *this = *this + str;
+}
+MyString& MyString::operator+= (const char* s)
+{
+	return *this = *this + s;
+}
+MyString& MyString::operator+= (char c)
+{
+	return *this = *this + c;
+}
+//========================POP_BACK========================
+
+void MyString::Pop_back()
+{
+	this->Resize(this->Size() - 1);
+}
+//========================PUSH_BACK========================
+
+void MyString::Push_back(char c)
+{
+	this->Resize(this->Size()+1, c);
+}
+
+//========================RESIZE========================
+
+void MyString::Resize(size_t n)
+{
+	MyString temp= *this;
+	size_t size = this->Size();
+	this->Clear();
+	size_t NewSize = n + 1;
+	this->str = new char[NewSize];
+	size_t i = 0;
+	for (i; i <n; i++)
+	{
+		if (i < size)
+		{
+			this->str[i] = temp[i];
+		}
+		else
+		{
+			this->str[i] = ' ';
+		}
+	}
+	this->str[i] = '\0';
+}
+void MyString::Resize(size_t n, char c)
+{
+	MyString temp = *this;;
+	size_t len = this->Size();
+	this->Clear();
+	this->str = new char[n+1];
+	size_t i = 0;
+	for (i; i < n; i++)
+	{
+		if (i < len)
+		{
+			this->str[i] = temp[i];
+		}
+		else
+		{
+			this->str[i] = c;
+		}
+	}
+	this->str[i] = '\0';
+}
+
+//========================SUBSTR========================
+
+MyString MyString::Substr(size_t pos, size_t len) const
+{
+	if (len == npos)
+	{
+		len = this->Size();
+	}
+	MyString string(*this,pos,len);
+	return string;
+}
 //========================SWAP========================
 void Swap(MyString &string_1,MyString &string_2)
 {
@@ -481,19 +819,18 @@ void Swap(MyString &string_1,MyString &string_2)
 	string_1 = string_2;
 	string_2 = temp;
 }
-	
-
-//
+//========================GETLINE========================
 istream& GetLine(istream &inDev, MyString &string)
 {
 	string.str= new char[255 + 1];
 	inDev.getline(string.str, 255);
 	return inDev;
 }
+//
 istream& operator>>(istream& inDev, MyString &string)
 {
 	string.str = new char[255 + 1];
-	inDev.getline(string.str, 255);
+	inDev.getline(string.str, 255,' ');
 	return inDev;
 }
 ostream& operator<<(ostream& outDev, const MyString &string)
